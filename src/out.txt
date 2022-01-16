@@ -1,0 +1,11 @@
+DIMENSION
+50
+PALABRAS
+cotila
+navajada
+misticismo
+atronado
+exasperacion
+cadaverina
+COMPLEJIDAD
+3
