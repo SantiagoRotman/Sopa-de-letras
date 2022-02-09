@@ -51,10 +51,6 @@ int arg_check(int argc, char **argv)
 	return 1;
 }
 
-//float diagonal(char* lado){
-//	return sqrt(2*pow(atoi(lado), 2));
-//}
-
 void imprimir(int largo, char* lemario[], char **argv, FILE *out)
 {
 	fprintf(out, "DIMENSION\n");

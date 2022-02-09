@@ -1,5 +1,6 @@
 import subprocess
 import os
+import config.config as config
 
 def LeerSalidaC(Cpath: str, Lpath: str):
 	EXEpath = os.path.realpath(os.path.join('.', os.path.dirname(__file__), '..', 'a.out'))
@@ -7,7 +8,7 @@ def LeerSalidaC(Cpath: str, Lpath: str):
 	
 
 	subprocess.Popen(['gcc', '-lm', Cpath])
-	if subprocess.call([EXEpath, Lpath, '50', '6', '5']):
+	if subprocess.call([EXEpath, Lpath, '19', '41', '5']):
 		print("error en la entrada")
 		return 1
 
@@ -23,5 +24,5 @@ def LeerSalidaC(Cpath: str, Lpath: str):
 				break
 			palabras.append(linea)
 		dificultad = salida.readline().strip('\n')
-
+	
 	return (dimension, palabras, dificultad)
