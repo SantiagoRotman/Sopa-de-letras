@@ -12,15 +12,15 @@ def main():
 
 	sopa  = [[' ' for i in range(dimension)] for j in range(dimension)]
 
-	sopa2 = [[i for i in range(dimension-j, math.floor(dimension/2)-j,-1)] + 
-				[i for i in range(math.ceil(dimension/2)-j+1, dimension-j+1)] 
-					for j in range(math.ceil(dimension/2))]
+	puntajes = [[i for i in range(dimension-j, math.floor(dimension/2)-j,-1)] + 
+					[i for i in range(math.ceil(dimension/2)-j+1, dimension-j+1)] 
+						for j in range(math.ceil(dimension/2))]
 
 	for x in range(math.floor(dimension/2)-1, -1, -1):
-		sopa2.append(sopa2[x])
+		puntajes.append(puntajes[x])
 
 
-	core.inicio_juego(sopa2, palabras, dificultad)
+	core.inicio_juego(sopa, puntajes, palabras, dificultad)
 
 
 if __name__ == "__main__":

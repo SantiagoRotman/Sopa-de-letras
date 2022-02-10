@@ -1,92 +1,8 @@
 import random
-from math import ceil
 import config.config as config
+import procedures.checks as checks
 
-def FiltrarDirecciones(posibilidades):
-	direcciones = []
-	for (key, value) in posibilidades.items():
-	    if value:
-	        direcciones.append(key)
-	return direcciones
-
-
-def mover(coord:(int, int), direccion):
-	(x, y) = coord
-	if "🡳" == direccion: return (x+1,  y )
-	if "🡲" == direccion: return ( x , y+1)
-	if "🡶" == direccion: return (x+1, y+1)
-	if "🡵" == direccion: return (x-1, y+1)
-	if "🡱" == direccion: return (x-1,  y )
-	if "🡷" == direccion: return (x+1, y-1)
-	if "🡰" == direccion: return ( x , y-1)
-	if "🡴" == direccion: return (x-1, y-1)
-
-
-def listas_a_checkear(coord: (int, int), sopa, direcciones, largo: int):
-	listas = dict()
-
-	for dir in direcciones:
-		aux = []
-		coord2 = coord
-
-		for i in range(largo):
-			aux.append(sopa[coord2[0]][coord2[1]])
-			coord2 = mover(coord2, dir)
-
-		listas[dir] = aux
-
-	return listas
-
-
-def CheckEspacio(coord: (int, int), direcciones, dimension: int, largo: int):
-	(x,y) = coord
-	posibilidades = []
-
-	if "🡳" in direcciones:
-		posibilidades.append("🡳") if (dimension >= x+largo) else None
-
-	if "🡲" in direcciones:
-		posibilidades.append("🡲") if (dimension >= y+largo) else None
-
-	if "🡶" in direcciones:
-		posibilidades.append("🡶") if (dimension-x > largo and dimension-y > largo) else None
-
-	if "🡵" in direcciones:
-		posibilidades.append("🡵") if (x > largo and dimension-y > largo) else None
-
-	if "🡱" in direcciones:
-		posibilidades.append("🡱") if (0 <= x-largo) else None
-
-	if "🡷" in direcciones:
-		posibilidades.append("🡷") if (dimension-x > largo and y > largo) else None
-
-	if "🡰" in direcciones:
-		posibilidades.append("🡰") if (0 <= y-largo) else None
-
-	if "🡴" in direcciones:
-		posibilidades.append("🡴") if (x > largo and y > largo) else None
-
-	return posibilidades
-
-
-def CheckLetras(palabra, listas, cruce: bool):
-	direcciones = []
-	for key in listas.keys():
-		ban = all(((type(letra2) is int) or (letra1 == letra2 and cruce)) for  letra1, letra2 in zip(palabra, listas[key]))
-		if ban:
-			direcciones.append(key) 
-	return direcciones
-
-
-def Checks(coord: (int, int), sopa, direcciones, palabra, cruce):
-	direcciones = CheckEspacio(coord, direcciones, len(sopa[0]), len(palabra))
-	listas = listas_a_checkear(coord, sopa, direcciones, len(palabra))
-	direcciones = CheckLetras(palabra, listas, cruce)
-
-	return direcciones
-
-
-def InsertarPalabra_random(sopa, palabra, direcciones, cruce):
+def InsertarPalabra_random(sopa, palabra,  direcciones, cruce):
 	dimension = len(sopa[0])
 	coordenadas = [(x,y) for x in range(dimension) for y in range(dimension)]
 	random.shuffle(coordenadas)
@@ -94,13 +10,13 @@ def InsertarPalabra_random(sopa, palabra, direcciones, cruce):
 	while ban and len(coordenadas)>0:
 		coord = coordenadas.pop()
 		coord2 = coord
-		posibilidades = Checks(coord, sopa, direcciones, palabra, cruce)
+		posibilidades = checks.Checks(coord, sopa, direcciones, palabra, cruce)
 
 		if 0 < len(posibilidades):
 			random.shuffle(posibilidades)
 			for letra in palabra:
 				sopa[coord[0]][coord[1]] = letra
-				coord = mover(coord, posibilidades[0])
+				coord = checks.mover(coord, posibilidades[0])
 			ban = False
 		
 	if len(coordenadas) == 0: 
@@ -112,7 +28,8 @@ def InsertarPalabra_random(sopa, palabra, direcciones, cruce):
 
 def JugarRandom(sopa, palabras, direcciones, cruce):
 	i = 0
-	while i in range(0, 20):
+	MAX = config.variables['MAX_INTENTOS']
+	while i in range(0, MAX):
 		sopa2 = [sopa[i].copy() for i in range(len(sopa[0]))]
 		print(i)
 		for palabra in palabras:
@@ -125,29 +42,51 @@ def JugarRandom(sopa, palabras, direcciones, cruce):
 			config.imprimir_sopa(sopa2)
 			return sopa2
 
-	if i == 20:
+	if i == MAX:
 		print ("no se pudo")
 
-def InsertarPalabra_metodico(sopa, coords, palabra, direcciones, cruce):
-	dimension = len(sopa[0])
+
+
+
+def InsertarPalabra_metodico(sopa, puntajes, coords, palabras, direcciones, cruce):
+	if len(palabras) == 0: return sopa 
+	for coord in coords:
+		posibilidades = checks.ChecksMetodico(coord, sopa, puntajes, direcciones, palabras[0], cruce)
+		for posibilidad in posibilidades:
+			sopa2 = [sopa[i].copy() for i in range(len(sopa[0]))]
+			aux = coord
+			#print(palabras[0], posibilidad, coord)
+			for letra in palabras[0]:
+				sopa2[aux[0]][aux[1]] = letra
+				aux = checks.mover(aux, posibilidad)
+
+			ban = InsertarPalabra_metodico(sopa2, puntajes, coords, palabras[1:], direcciones, cruce)
+			if ban != False: return ban
+
+	return False
 	
 
 
-def JugarMetodico(sopa, palabras, direcciones, cruce):
+def JugarMetodico(sopa, palabras, puntajes, direcciones, cruce):
 	Coords = []
 	for x in range(len(sopa)):
 		for y in range(len(sopa)):
-			Coords.append( ((x,y), sopa[x][y]) )
+			Coords.append( ((x,y), puntajes[x][y]) )
 
 	Coords = sorted(Coords, key=config.second, reverse = True)
-	
-	for palabra in palabras:
+	Coords = list(map(config.first, Coords))
+   
+	aaa = InsertarPalabra_metodico(sopa, puntajes, Coords, palabras, direcciones, cruce)
+	if aaa == False:
+		print("no se pudo")
+	else:
+		config.imprimir_sopa(aaa)
 
 
 def rellenar(sopa):
 	for V in range(len(sopa[0])):
 		for H in range(len(sopa[0])):
-			if type(sopa[V][H]) is int:
+			if sopa[V][H] == ' ':
 				sopa[V][H] = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 
@@ -155,7 +94,7 @@ def rellenar(sopa):
 #🡲 - 🡰
 #🡵.🡱.🡴
 
-def inicio_juego(sopa, palabras: list, dificultad: int):
+def inicio_juego(sopa, puntajes, palabras: list, dificultad: int):
 	dificultad = int(dificultad)
 
 	if dificultad == 0:
@@ -174,4 +113,5 @@ def inicio_juego(sopa, palabras: list, dificultad: int):
 	
 
 	JugarRandom(sopa, palabras, dir, cruce)
-	JugarMetodico(sopa, palabras, dir, cruce)
+	print("")
+	JugarMetodico(sopa, palabras, puntajes, dir, cruce)

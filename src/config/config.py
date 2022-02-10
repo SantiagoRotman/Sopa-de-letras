@@ -5,10 +5,20 @@ dificultades = {
 }
 
 archivos = {
-	'C_EXE': 'a.out',
-	'salidaC': 'out.txt',
-	'lemario': 'lemario.txt',
-	'entradaC': 'entrada.c'
+	"C_EXE": "a.out",
+	"salidaC": "out.txt",
+	"lemario": "lemario.txt",
+	"entradaC": "entrada.c"
+}
+
+variables = {
+	'MAX_INTENTOS': 20
+}
+
+info = {
+    "name": 'Sopa_de_Letras',
+    "version": '1.0.0',
+    "author": 'Santiago Rotman'
 }
 
 def imprimir_sopa(sopa):
@@ -20,6 +30,9 @@ def imprimir_sopa(sopa):
 			else:
 				print(letra, end='|')
 		print('')
+
+def first(tupla): 
+	return tupla[0]
 
 def second(tupla): 
 	return tupla[1]
