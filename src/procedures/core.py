@@ -1,4 +1,6 @@
 import random
+from re import A
+from turtle import pos
 import config.config as config
 import procedures.checks as checks
 
@@ -49,10 +51,14 @@ def JugarRandom(sopa, palabras, direcciones, cruce):
 
 
 def InsertarPalabra_metodico(sopa, puntajes, coords, palabras, direcciones, cruce):
-	if len(palabras) == 0: return sopa 
+	if len(palabras) == 0: return sopa
+	#print(len(palabras)) 
 	for coord in coords:
+		#print(coord)
 		posibilidades = checks.ChecksMetodico(coord, sopa, puntajes, direcciones, palabras[0], cruce)
+		#print(posibilidades)
 		for posibilidad in posibilidades:
+			#print("aaaa")
 			sopa2 = [sopa[i].copy() for i in range(len(sopa[0]))]
 			aux = coord
 			#print(palabras[0], posibilidad, coord)
@@ -61,6 +67,7 @@ def InsertarPalabra_metodico(sopa, puntajes, coords, palabras, direcciones, cruc
 				aux = checks.mover(aux, posibilidad)
 
 			ban = InsertarPalabra_metodico(sopa2, puntajes, coords, palabras[1:], direcciones, cruce)
+			
 			if ban != False: return ban
 
 	return False
@@ -106,7 +113,7 @@ def inicio_juego(sopa, puntajes, palabras: list, dificultad: int):
 	cruce = True if dificultad == 3 else False
 
 	palabras = sorted(palabras, key=len, reverse = True)
-
+	print(palabras)
 	for i in range(len(palabras)):
 		palabras[i] = palabras[i].upper()
 

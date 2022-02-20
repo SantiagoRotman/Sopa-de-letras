@@ -6,7 +6,7 @@ import math
 def main():
 	Cpath = os.path.realpath(os.path.join(os.path.dirname(__file__), 'input', 'entrada.c'))
 	Lpath = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'docs', 'lemario.txt'))
-	
+	print(Cpath)
 	(dimension, palabras, dificultad) = scripts.LeerSalidaC(Cpath, Lpath)
 	dimension = int(dimension)
 

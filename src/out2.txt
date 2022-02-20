@@ -1,0 +1,14 @@
+DIMENSION
+7
+PALABRAS
+descam
+codill
+aeromd
+carida
+cuitao
+condoz
+kakoak
+ddddd
+ploerx
+COMPLEJIDAD
+3

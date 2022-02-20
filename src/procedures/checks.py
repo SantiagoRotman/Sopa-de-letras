@@ -43,28 +43,28 @@ def CheckEspacio(coord: (int, int), direcciones, dimension: int, largo: int):
 	posibilidades = []
 
 	if "🡳" in direcciones:
-		posibilidades.append("🡳") if (dimension > x+largo) else None
+		posibilidades.append("🡳") if (dimension >= x+largo) else None
 
 	if "🡲" in direcciones:
-		posibilidades.append("🡲") if (dimension > y+largo) else None
+		posibilidades.append("🡲") if (dimension >= y+largo) else None
 
 	if "🡶" in direcciones:
-		posibilidades.append("🡶") if (dimension-x > largo and dimension-y > largo) else None
+		posibilidades.append("🡶") if (dimension-x >= largo and dimension-y >= largo) else None
 
 	if "🡵" in direcciones:
-		posibilidades.append("🡵") if (x > largo and dimension-y > largo) else None
+		posibilidades.append("🡵") if (x >= largo and dimension-y >= largo) else None
 
 	if "🡱" in direcciones:
-		posibilidades.append("🡱") if (0 < x-largo) else None
+		posibilidades.append("🡱") if (0 <= x-largo) else None
 
 	if "🡷" in direcciones:
-		posibilidades.append("🡷") if (dimension-x > largo and y > largo) else None
+		posibilidades.append("🡷") if (dimension-x >= largo and y >= largo) else None
 
 	if "🡰" in direcciones:
-		posibilidades.append("🡰") if (0 < y-largo) else None
+		posibilidades.append("🡰") if (0 <= y-largo) else None
 
 	if "🡴" in direcciones:
-		posibilidades.append("🡴") if (x > largo and y > largo) else None
+		posibilidades.append("🡴") if (x >= largo and y >= largo) else None
 
 	return posibilidades
 
@@ -80,6 +80,7 @@ def CheckLetras(palabra, listas, cruce: bool):
 def CheckPuntaje(coord: (int, int), puntajes, direcciones, largo):
 	aux  = list()
 	aux2 = list()
+	largo -= 1
 	(x,y) = coord
 	if "🡳" in direcciones: aux.append(("🡳", puntajes[x+largo][y]   ))
 	if "🡲" in direcciones: aux.append(("🡲", puntajes[ x ][y+largo] ))
@@ -105,9 +106,13 @@ def ChecksMetodico(coord: (int, int), sopa, puntajes, direcciones, palabra, cruc
 	return direcciones
 
 def Checks(coord: (int, int), sopa, direcciones, palabra, cruce):
+	#print(direcciones)
 	direcciones = CheckEspacio(coord, direcciones, len(sopa[0]), len(palabra))
+	#print(direcciones)
 	listas = listas_a_checkear(coord, sopa, direcciones, len(palabra))
+	#print(listas)
 	direcciones = CheckLetras(palabra, listas, cruce)
+
 
 
 	return direcciones
