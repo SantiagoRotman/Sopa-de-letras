@@ -16,6 +16,9 @@ int arg_check(int argc, char **argv);
 // no se retorna nada ya que imprime al archivo de salida
 void imprimir(int largo, char* lemario[], char **argv, FILE *out);
 
+void agregoMem(int largo, char* lemario[]);
+
+char* buscarPal(int largo, char* lemario[], int palabras[]);
 
 int main(int argc, char **argv){
 	if (0 == arg_check(argc, argv)) return 1; // Si los argumentos no son validos termina el programa
@@ -60,6 +63,8 @@ int main(int argc, char **argv){
 	return 0;
 	
 }
+
+
 
 
 int arg_check(int argc, char **argv)
