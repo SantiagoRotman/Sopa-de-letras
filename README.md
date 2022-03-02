@@ -23,7 +23,7 @@ gcc assert.c
 ./a.out
 ```
 
-### Puthon
+### Python
 
 ```
 cd src/
