@@ -141,7 +141,7 @@ def inicio_juego(sopa, puntajes, palabras: list, dificultad: int):
 
 	cruce = True if dificultad == 3 else False
 
-	palabras = sorted(palabras, key=len, reverse = True)
+	palabras = sorted(palabras, key=len, reverse = True) # Ordeno las palabras de mayor a menor
 
 	for i in range(len(palabras)):	# Hago las palabras mayusculas
 		palabras[i] = palabras[i].upper()
@@ -151,12 +151,15 @@ def inicio_juego(sopa, puntajes, palabras: list, dificultad: int):
 
 	SopaFinal = JugarRandom(sopa, palabras, dir, cruce)
 	if(SopaFinal != False):
-		SopaFinal = rellenarNoRepetidas(palabras, dir, SopaFinal)
+		#print(SopaFinal[1])
+		#config.imprimir_sopa(SopaFinal[0])
+		SopaFinal = rellenarNoRepetidas(palabras, dir, SopaFinal) # Relleno la sopa
 		return SopaFinal
 
 	SopaFinal= JugarMetodico(sopa, palabras, puntajes, dir, cruce)
 	if(SopaFinal == False):
 		return False
 	else:
-		SopaFinal = rellenarNoRepetidas(palabras, dir, SopaFinal)
+		#config.imprimir_sopa(SopaFinal[0])
+		SopaFinal = rellenarNoRepetidas(palabras, dir, SopaFinal) # Relleno la sopa
 		return SopaFinal

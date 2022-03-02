@@ -37,9 +37,10 @@ def main(argv):
 	SopaFinal = core.inicio_juego(sopa, puntajes, palabras, dificultad)
 
 	if SopaFinal:
+		#config.imprimir_sopa(SopaFinal[0])
 		scripts.SalidaSopa(SopaFinal)
 	else:
-		scripts.SalidaImposible(SopaFinal)
+		scripts.SalidaImposible()
 
 if __name__ == "__main__":
     main(sys.argv[1:])

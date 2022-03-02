@@ -138,21 +138,41 @@ def ChecksPreliminares(palabras, dimension, dificultad):
 
 	return ban
 
+#Funcion vieja la dejo por las dudas
+#def CheckNoRepetidasViejo(palabras, direcciones, SopaResuelta):
+#	(sopa, lista) = SopaResuelta
+#	ban = True
+#	for (palabra, (coord, palabra2, dir)) in zip(palabras, lista):
+#		encontradas = config.buscar(sopa, palabra, direcciones)
+#
+#		capicua = 2 if palabra == palabra[::-1] else 1
+#
+#		if len(encontradas) != capicua:
+#			sopa2 = [sopa[i].copy() for i in range(len(sopa[0]))]
+#			config.borrarPal(sopa2, coord, palabra2, dir)
+#			encontradas = config.buscar(sopa2, palabra, direcciones)
+#			if len(encontradas) == 0:
+#				ban = False
+#	return ban
+
 #ChecksPreliminares: List[string] -> List[string] -> (List[List[char]], List[((int, int), string, string)]) -> Bool
 #Tomo las lista de palabras, la de las direcciones y la tupla con la sopa y la palabras de la sopa en
 # formato (coord, palabra, direccion)
-# y devuelvo True si no se forma otra la misma palabra de otra forma y False de lo contra
+# y devuelvo True si no se forma la misma palabra de otra forma y False de lo contrario
 def CheckNoRepetidas(palabras, direcciones, SopaResuelta):
 	(sopa, lista) = SopaResuelta
 	ban = True
-	for (palabra, (coord, palabra2, dir)) in zip(palabras, lista):
-		encontradas = config.buscar(sopa, palabra, direcciones)
-		capicua = 2 if palabra == palabra[::-1] else 1
+	for palabra in palabras:
+		capicua = 2 if palabra == palabra[::-1] else 1 # Me fijo si es palindromo
+		veces = 0
 
-		if len(encontradas) != capicua:
-			sopa2 = [sopa[i].copy() for i in range(len(sopa[0]))]
-			config.borrarPal(sopa2, coord, palabra2, dir)
-			encontradas = config.buscar(sopa2, palabra, direcciones)
-			if len(encontradas) == 0:
-				ban = False
-	return ban
+		for palabra2 in palabras: # Cuento cuantas veces aparece dentro de otras palabras
+			veces = veces + palabra2.count(palabra)
+
+		veces = veces * capicua
+
+		encontradas = config.buscar(sopa, palabra, direcciones)  # cuantas veces aparece en la sopa
+		if len(encontradas) > veces: ban = False # si aparece mas veces en la sopa de las que tendria
+
+	return ban 
+

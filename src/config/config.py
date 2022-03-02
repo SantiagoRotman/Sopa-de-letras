@@ -59,7 +59,7 @@ def buscar(sopa, palabra, dirs):
 #borrarPal: List[List[char]] -> (int, int) -> string -> string -> List[List[char]]
 #Toma la sopa, la coordenada de la palabra, la palabra y la direccion de la palabra,
 # devuelve la sopa sin la palabra
-def borrarPal(sopa, coord, palabra, dir):
+def borrarPal(sopa, coord, palabra, dir): # al final no se usa 
 	largo  = len(palabra)
 
 	for i in range(largo):
